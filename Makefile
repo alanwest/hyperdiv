@@ -9,7 +9,7 @@ hyperdiv/public: frontend/public/build
 	cp -r frontend/public hyperdiv
 
 frontend/public/build:
-	cd frontend && npm run build
+	cd frontend && npm install && npm run build
 
 clean:
 	rm -rf frontend/public/build

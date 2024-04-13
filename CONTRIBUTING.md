@@ -2,6 +2,26 @@
 
 High quality PRs will be considered for merging. For significant work, open an issue first, or a draft PR, so we can discuss the approach.
 
+## Summary
+
+### Install required tools
+
+* [Python](https://www.python.org)
+* [Poetry](https://python-poetry.org/docs)
+* [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+* [Rollup](https://rollupjs.org/introduction)
+
+### Clone repositories and build Hyperdiv
+
+```shell
+git clone git@github.com:hyperdiv/hyperdiv.git
+git clone git@github.com:hyperdiv/hyperdiv-docs.git
+cd hyperdiv
+poetry install
+poetry shell
+make
+```
+
 ## Code Organization
 
 The code is organized as follows:
