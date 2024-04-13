@@ -28,6 +28,8 @@ email-validator = "^2.0.0"
 frozendict = "^2.3.10"
 parse = "^1.20.0"
 pygments = "^2.17.2"
+opentelemetry-sdk = "^1.24.0"
+opentelemetry-exporter-otlp-proto-http = "^1.24.0"
 
 [tool.poetry.scripts]
 hyperdiv = "hyperdiv.cli:cli"

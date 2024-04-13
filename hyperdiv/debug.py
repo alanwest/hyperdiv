@@ -2,6 +2,7 @@ import logging
 import cProfile
 import io
 import pstats
+from opentelemetry import metrics
 import os
 import time
 from contextlib import contextmanager
@@ -45,6 +46,10 @@ elif PRODUCTION:
     for logger_name in ("tornado.access", "tornado.application", "tornado.general"):
         logging.getLogger(logger_name).setLevel(logging.ERROR)
 
+meter = metrics.get_meter("hyperdiv")
+hyperdiv_duration = meter.create_histogram(
+    "hyperdiv.operation.duration", unit="s", description="Measures the duration of hyperdiv stuff."
+)
 
 @contextmanager
 def timing(name, profile=False, lines=30, percent=None, regex=".*hyperdiv.*"):
@@ -64,10 +69,12 @@ def timing(name, profile=False, lines=30, percent=None, regex=".*hyperdiv.*"):
         yield
     finally:
         if DEBUG:
-            ms = (time.time() - start) * 1000
+            s = (time.time() - start)
+            ms = s * 1000
             colored_time = colored(f"{ms:.2f}ms", "red")
             colored_label = colored(name, "yellow")
             logger.debug(f"{colored_label}: {colored_time}")
+            hyperdiv_duration.record(s, {"hyperdiv.operation.name": name})
 
         if profile:
             profiler.disable()
