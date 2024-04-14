@@ -3,6 +3,7 @@ import cProfile
 import io
 import pstats
 from opentelemetry import metrics
+from opentelemetry import trace
 import os
 import time
 from contextlib import contextmanager
@@ -51,6 +52,8 @@ hyperdiv_duration = meter.create_histogram(
     "hyperdiv.operation.duration", unit="s", description="Measures the duration of hyperdiv stuff."
 )
 
+tracer = trace.get_tracer("hyperdiv")
+
 @contextmanager
 def timing(name, profile=False, lines=30, percent=None, regex=".*hyperdiv.*"):
     if profile:
@@ -66,7 +69,8 @@ def timing(name, profile=False, lines=30, percent=None, regex=".*hyperdiv.*"):
         start = time.time()
 
     try:
-        yield
+        with tracer.start_as_current_span(name) as span:
+            yield
     finally:
         if DEBUG:
             s = (time.time() - start)
